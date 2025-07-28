@@ -1,0 +1,9 @@
+{% extends 'layout.html' %}
+
+{% block title %}Home - Live Chat{% endblock %}
+
+{% block content %}
+    <h1 class="text-center">Welcome to the Live Chat App</h1>
+    <p class="text-center">This is a demo app built using Flask for real-time communication.</p>
+    <a href="{{ url_for('main.chat') }}">chat</a>
+    {% endblock %}

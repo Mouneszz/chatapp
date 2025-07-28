@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat Room</title>
+    <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+    
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #343541;
+            color: #EDEDED;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+    
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            width: 100%;
+        }
+    
+        h2 {
+            padding: 16px;
+            margin: 0;
+            background-color: #40414F;
+            text-align: center;
+            border-bottom: 1px solid #444;
+            color: #EDEDED;
+            font-size: 18px;
+        }
+    
+        #messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: #343541;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+    
+        .message {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            font-size: 15px;
+            line-height: 1.5;
+            word-wrap: break-word;
+            display: inline-block;
+            position: relative;
+            color: #EDEDED;
+        }
+    
+        .my-message {
+            background-color: #10A37F;
+            align-self: flex-end;
+            border-bottom-right-radius: 0;
+        }
+    
+        .other-message {
+            background-color: #444654;
+            align-self: flex-start;
+            border-bottom-left-radius: 0;
+        }
+    
+        #chatBox {
+            display: flex;
+            gap: 10px;
+            padding: 16px;
+            border-top: 1px solid #444;
+            background-color: #40414F;
+        }
+    
+        #messageInput {
+            flex: 1;
+            padding: 14px 18px;
+            background-color: #343541;
+            color: #EDEDED;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            outline: none;
+            box-shadow: inset 0 0 0 1px #555;
+        }
+    
+        #messageInput:focus {
+            box-shadow: inset 0 0 0 2px #10A37F;
+        }
+    
+        #messageInput::placeholder {
+            color: #888;
+        }
+    
+        button {
+            padding: 12px 16px;
+            background-color: #10A37F;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 500;
+            transition: background-color 0.2s ease;
+        }
+    
+        button:hover {
+            background-color: #0e8f6b;
+        }
+    </style>    
+</head>
+<body>
+<div class="chat-container">
+    <h2>Live Chat</h2>
+    <ul id="messages"></ul>
+    <div id="chatBox">
+        <input id="messageInput" autocomplete="off" placeholder="Type a message..." />
+        <button onclick="sendMessage()">Send</button>
+    </div>
+</div>
+
+<script>
+    const socket = io();
+    let mySocketId = null;
+
+    socket.on('connect', () => {
+        mySocketId = socket.id;
+    });
+
+    socket.on('receive_message', function (data) {
+        const li = document.createElement("li");
+        li.classList.add('message');
+
+        if (data.sender_id === mySocketId) {
+            li.classList.add('my-message');
+        } else {
+            li.classList.add('other-message');
+        }
+
+        li.textContent = data.message;
+        document.getElementById("messages").appendChild(li);
+        document.getElementById("messages").scrollTop = document.getElementById("messages").scrollHeight;
+    });
+
+    function sendMessage() {
+        const input = document.getElementById("messageInput");
+        const message = input.value.trim();
+        if (message !== '') {
+            socket.emit('send_message', { message: message });
+            input.value = '';
+        }
+    }
+</script>
+</body>
+</html>
