@@ -6,13 +6,14 @@ from app.models import User
 
 main = Blueprint('main', __name__)
 
-@main.route('/chat')
-def chat():
-    if current_user.is_authenticated:
-        return render_template('chat.html')  # ✅ Pass username to template
-    else:
-        flash('You must be logged in to access the chat.')
-        return redirect(url_for('main.login'))
+chat_rooms = []  # simple in-memory list
+
+@main.route('/chat/<room_id>')
+def chat(room_id):
+    if room_id not in chat_rooms:
+        flash("Room doesn't exist.")
+        return redirect(url_for('main.home'))
+    return render_template('chat.html', room=room_id)
 
 @main.route('/')
 def index():
@@ -20,8 +21,20 @@ def index():
 
 @main.route('/home')
 def home():
-    return render_template('home.html')
-    
+    return render_template('home.html',rooms=chat_rooms)
+
+@main.route('/create_room', methods=['POST'])
+def create_room():
+    room_id = f"room{len(chat_rooms)+1}"
+    chat_rooms.append(room_id)
+    return redirect(url_for('main.home'))
+
+@main.route('/delete_room/<room_id>', methods=['POST'])
+def delete_room(room_id):
+    if room_id in chat_rooms:
+        chat_rooms.remove(room_id)
+    return redirect(url_for('main.home'))
+
 @main.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
