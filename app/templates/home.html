@@ -5,110 +5,103 @@
     <title>Chat Rooms</title>
     <style>
         body {
+            background-color: #1a1a1a;
+            color: #e0e0e0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #0d1117;
-            color: #c9d1d9;
             padding: 40px;
-            margin: 0;
         }
 
         h2 {
-            margin-bottom: 30px;
+            color: #a4ffaf;
             font-size: 28px;
-            color: #58a6ff;
-        }
-
-        .create-room-form {
             margin-bottom: 25px;
         }
 
-        .create-room-form button {
-            background-color: #238636;
-            color: white;
+        form button, .action-buttons a button, .action-buttons form button {
+            padding: 10px 16px;
             border: none;
-            padding: 10px 20px;
+            border-radius: 6px;
             font-size: 16px;
-            border-radius: 8px;
             cursor: pointer;
+            transition: background-color 0.3s ease;
         }
 
-        .create-room-form button:hover {
-            background-color: #2ea043;
+        form button {
+            background-color: #2ecc71;
+            color: #fff;
+        }
+
+        form button:hover {
+            background-color: #27ae60;
         }
 
         .room-card {
-            background-color: #161b22;
-            border: 1px solid #30363d;
-            border-radius: 10px;
-            padding: 15px 20px;
+            background-color: #2c2c2c;
+            border-radius: 8px;
+            padding: 16px;
             margin-bottom: 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
         }
 
         .room-name {
             font-size: 18px;
             font-weight: bold;
+            color: #a4ffaf;
         }
 
-        .room-actions {
+        .action-buttons {
             display: flex;
             gap: 10px;
         }
 
-        .room-actions button {
-            padding: 8px 14px;
-            font-size: 14px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
+        .action-buttons a button {
+            background-color: #2ecc71;
+            color: #fff;
         }
 
-        .room-actions .join-btn {
-            background-color: #0969da;
-            color: white;
+        .action-buttons a button:hover {
+            background-color: #27ae60;
         }
 
-        .room-actions .join-btn:hover {
-            background-color: #1f6feb;
+        .action-buttons form button {
+            background-color: #e74c3c;
+            color: #fff;
         }
 
-        .room-actions .delete-btn {
-            background-color: #da3633;
-            color: white;
-        }
-
-        .room-actions .delete-btn:hover {
-            background-color: #f85149;
+        .action-buttons form button:hover {
+            background-color: #c0392b;
         }
 
         p {
-            color: #8b949e;
+            font-size: 16px;
+            color: #777;
         }
     </style>
 </head>
 <body>
-    <h2>🗨️ Chat Rooms</h2>
+    <h2>💬 Chat Rooms</h2>
 
-    <form class="create-room-form" action="/create_room" method="POST">
+    <form action="/create_room" method="POST" style="margin-bottom: 30px;">
         <button type="submit">➕ Create Room</button>
     </form>
 
     {% for room in rooms %}
     <div class="room-card">
         <div class="room-name">{{ room }}</div>
-        <div class="room-actions">
+        <div class="action-buttons">
             <a href="{{ url_for('main.chat', room_id=room) }}">
-                <button class="join-btn">Join</button>
+                <button type="button">Join</button>
             </a>
-            <form action="{{ url_for('main.delete_room', room_id=room) }}" method="POST" style="display:inline;">
-                <button type="submit" class="delete-btn">Delete</button>
+            <form action="{{ url_for('main.delete_room', room_id=room) }}" method="POST">
+                <button type="submit">Delete</button>
             </form>
         </div>
     </div>
     {% else %}
-    <p>No rooms yet. Create one above ⬆️</p>
+    <p>No rooms created yet.</p>
     {% endfor %}
 </body>
 </html>

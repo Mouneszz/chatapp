@@ -11,7 +11,7 @@
     
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #343541;
+            background: #1e1f26;
             color: #EDEDED;
             margin: 0;
             height: 100vh;
@@ -29,7 +29,7 @@
         h2 {
             padding: 16px;
             margin: 0;
-            background-color: #40414F;
+            background-color: #1e1f26;
             text-align: center;
             border-bottom: 1px solid #444;
             color: #EDEDED;
@@ -40,7 +40,7 @@
             flex: 1;
             padding: 20px;
             overflow-y: auto;
-            background-color: #343541;
+            background-color: #1e1f26;
             display: flex;
             flex-direction: column;
             gap: 10px;
@@ -70,13 +70,49 @@
             border-bottom-left-radius: 0;
         }
     
-        #chatBox {
-            display: flex;
-            gap: 10px;
-            padding: 16px;
-            border-top: 1px solid #444;
-            background-color: #40414F;
-        }
+        .chat-input-container {
+      background-color: #2b2b2b;
+      border-radius: 20px;
+      margin: 16px auto;
+      padding: 20px 30px;
+      display: flex;
+      align-items: center;
+      width: 95%;
+      max-width: 700px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.5);
+    }
+
+    .chat-input-container input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: white;
+      font-size: 16px;
+      outline: none;
+    }
+
+    .send-button {
+      background: #3c3c3c;
+      border: none;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+
+    .send-button:hover {
+      background: #4d4d4d;
+    }
+
+    .send-button::before {
+      content: "➤";
+      color: white;
+      font-size: 16px;
+    }
     
         #messageInput {
             flex: 1;
@@ -119,9 +155,9 @@
 <div class="chat-container">
     <h2>Live Chat</h2>
     <ul id="messages"></ul>
-    <div id="chatBox">
-        <input id="messageInput" autocomplete="off" placeholder="Type a message..." />
-        <button onclick="sendMessage()">Send</button>
+    <div class="chat-input-container">
+      <input id="messageInput" autocomplete="off" placeholder="Ask anything..." />
+      <button class="send-button" onclick="sendMessage()"></button>
     </div>
 </div>
 
